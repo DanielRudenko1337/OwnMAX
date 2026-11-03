@@ -168,7 +168,10 @@ Live databases, `.env`, private keys, certificates, and client builds are exclud
 
 ## Feedback
 
-If you find a bug, open an issue describing the action, expected result, client version, and actual behavior. Include logs without tokens, sign-in codes, or personal data. When changing code, add a regression check when it helps reproduce the problem.
+For questions, suggestions, and feedback, contact the project author on Telegram: **[@danielrudenko](https://t.me/danielrudenko)**.
+
+When reporting a bug, describe the action, expected result, client version, and actual behavior. Include logs without tokens, sign-in codes, or personal data. You can also open a GitHub issue to track the problem.
+
 
 ## License and attribution
 
