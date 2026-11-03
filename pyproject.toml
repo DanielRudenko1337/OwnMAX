@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ownmax"
+version = "0.1.0"
+description = "OwnMAX messaging compatibility server"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "OwnMAX"}]
+requires-python = ">=3.12"
+dynamic = ["dependencies"]
+
+[project.scripts]
+ownmax = "ownmax.cli:main"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"ownmax.storage" = ["*.sql"]
+
+[tool.black]
+line-length = 100
