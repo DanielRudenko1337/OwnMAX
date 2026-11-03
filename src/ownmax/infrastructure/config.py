@@ -8,9 +8,7 @@ load_dotenv()
 class ServerConfig:
     host = os.getenv("host") or "0.0.0.0"
     oneme_tcp_port = int(os.getenv("oneme_tcp_port") or 443)
-    tamtam_tcp_port = int(os.getenv("tamtam_tcp_port") or 4433)
     oneme_ws_port = int(os.getenv("oneme_ws_port") or 81)
-    tamtam_ws_port = int(os.getenv("tamtam_ws_port") or 82)
     log_level = os.getenv("log_level") or "debug"
     db_type = os.getenv("db_type") or "mysql"
     db_host = os.getenv("db_host") or "127.0.0.1"

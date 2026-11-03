@@ -1,0 +1,13 @@
+This archive contains a modified third-party MAX Windows client and its bundled
+runtime libraries. Existing copyright and legal notices in those files remain
+in effect. This is an unofficial compatibility build and is not endorsed by
+the original application's developers.
+
+The OwnMAX repository's MIT license applies to the OwnMAX server and the
+configuration/build scripts supplied by this project. It does not relicense
+the third-party MAX executable, Qt, FFmpeg, OpenSSL, Microsoft runtimes, or
+other bundled components. Those components retain their respective terms.
+
+The server endpoint, local configuration path and related settings in four
+PE files have been changed. Other client files are retained unchanged.
+Original executable product and copyright metadata have not been removed.

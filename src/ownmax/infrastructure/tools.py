@@ -127,53 +127,6 @@ class Tools:
         else:
             return contact
 
-    def generate_profile_tt(
-        self,
-        id=None,
-        phone=None,
-        avatarUrl=None,
-        photoId=None,
-        updateTime=None,
-        firstName=None,
-        lastName=None,
-        options=None,
-        description=None,
-        username=None,
-        custom_firstname=None,
-        custom_lastname=None,
-        blocked=None,
-    ):
-        if firstName and lastName:
-            name = f"{firstName} {lastName}"
-        else:
-            name = firstName
-        if custom_firstname and custom_lastname:
-            custom_name = f"{custom_firstname} {custom_lastname}"
-        elif custom_firstname:
-            custom_name = custom_firstname
-        else:
-            custom_name = None
-        contact = {
-            "id": id,
-            "updateTime": updateTime,
-            "phone": phone,
-            "names": [{"name": name, "type": "TT"}],
-            "options": options,
-        }
-        if avatarUrl:
-            contact["photoId"] = photoId
-            contact["baseUrl"] = avatarUrl
-            contact["baseRawUrl"] = avatarUrl
-        if description:
-            contact["description"] = description
-        if username:
-            contact["link"] = "https://tt.me/" + username
-        if custom_firstname:
-            contact["names"].append({"name": custom_name, "type": "CUSTOM"})
-        if blocked:
-            contact["status"] = "BLOCKED"
-        return contact
-
     def generate_chat(
         self, id, owner, type, participants, lastMessage, lastEventTime, prevMessageId=0
     ):

@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, patch
 import aiosqlite
 from ownmax import app
 from ownmax.infrastructure.sqlite import SQLitePoolCompat
-from ownmax.protocols.tamtam.processors import Processors
+from ownmax.protocols.max.processors import Processors
 
 
 class StartupTests(unittest.IsolatedAsyncioTestCase):
@@ -40,7 +40,7 @@ class StartupTests(unittest.IsolatedAsyncioTestCase):
 
         class Database:
             def close(self):
-                if len(finished) != 4:
+                if len(finished) != 3:
                     raise AssertionError(f"Tasks still running: {finished}")
                 self.closed = True
 
@@ -49,15 +49,14 @@ class StartupTests(unittest.IsolatedAsyncioTestCase):
 
         database = Database()
         controllers = [
-            SimpleNamespace(launch=lambda api, i=i: worker(str(i), i == 0)) for i in range(3)
+            SimpleNamespace(launch=lambda api, i=i: worker(str(i), i == 0)) for i in range(2)
         ]
         with (
             patch.object(app, "init_ssl", return_value=object()),
             patch.object(app, "init_db", new=AsyncMock(return_value=database)),
             patch.object(app, "PushService"),
             patch.object(app, "OnemeController", return_value=controllers[0]),
-            patch.object(app, "TTController", return_value=controllers[1]),
-            patch.object(app, "TelegramBotController", return_value=controllers[2]),
+            patch.object(app, "TelegramBotController", return_value=controllers[1]),
             patch.object(app, "launch_calls", new=lambda *args: worker("calls")),
             patch.object(app.sys, "platform", "win32"),
             patch.object(app.logging, "exception") as error,
@@ -78,7 +77,7 @@ class Capture:
         pass
 
 
-class TamTamFolderTests(unittest.IsolatedAsyncioTestCase):
+class MaxFolderTests(unittest.IsolatedAsyncioTestCase):
     async def test_folder_create_read_and_invalid_payload(self):
         raw = await aiosqlite.connect(":memory:", isolation_level=None)
         raw.row_factory = aiosqlite.Row
@@ -88,7 +87,12 @@ class TamTamFolderTests(unittest.IsolatedAsyncioTestCase):
             await raw.executescript(
                 files("ownmax.storage").joinpath("schema.sqlite.sql").read_text()
             )
-            processor = Processors(db_pool=SQLitePoolCompat(raw))
+            for uid, phone in [(1, "1001"), (2, "1002")]:
+                await raw.execute(
+                    "INSERT INTO users(id,phone,firstname,lastname,username,description,profileoptions,options,accountstatus,updatetime,lastseen) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                    (uid, phone, "Fixture", "", "fixture_" + phone, "", "[]", "[]", 0, "0", "0"),
+                )
+            processor = Processors(db_pool=SQLitePoolCompat(raw), send_event=AsyncMock())
             writer = Capture()
             await processor.folders_update({"id": "work", "title": "Work"}, 1, writer, "1001")
             result = processor.proto.unpack_packet(writer.packets[0])

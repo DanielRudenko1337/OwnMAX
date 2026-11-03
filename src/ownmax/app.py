@@ -8,7 +8,6 @@ from ownmax.infrastructure.push import PushService
 from ownmax.infrastructure.sqlite import SQLitePoolCompat
 from ownmax.protocols.max.controller import OnemeController
 from ownmax.protocols.max.call_service import launch as launch_calls
-from ownmax.protocols.tamtam.controller import TTController
 from ownmax.integrations.telegram.controller import TelegramBotController
 
 server_config = ServerConfig()
@@ -84,7 +83,6 @@ async def main():
     }
     controllers = {
         "oneme": OnemeController(),
-        "tamtam": TTController(),
         "telegrambot": TelegramBotController(),
     }
     api["telegram_bot"] = controllers["telegrambot"]

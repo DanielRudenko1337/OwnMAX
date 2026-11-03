@@ -2,26 +2,30 @@
 
 **English** | [Русский](README.ru.md)
 
-**A self-hosted messaging server for chats, groups, media, and bots, with MAX and TamTam protocol support.**
+**A self-hosted messaging server for chats, groups, media, and bots, with MAX protocol support.**
 
-OwnMAX is an independent project. It is not the official MAX, is not affiliated with its developers, and is not supported or endorsed by them. The names MAX and TamTam describe protocol compatibility, not a partnership or endorsement.
+OwnMAX is an independent project. It is not the official MAX, is not affiliated with its developers, and is not supported or endorsed by them. The name MAX describes protocol compatibility, not a partnership or endorsement.
 
-OwnMAX aims to run core messaging workflows on your own server, with your own database and configuration. This repository contains a Python server, a separate SMS service, and a sample bot. Client applications, APKs, IPAs, and Windows builds are not included. You need a client configured to connect to your server; installing an official client alone does not configure that connection.
+OwnMAX aims to run core messaging workflows on your own server, with your own database and configuration. This repository contains a Python server, a separate SMS service, and a sample bot. Native client sources, APKs, and IPAs are not included. A Windows x64 preview is distributed separately in [Releases](https://github.com/DanielRudenko1337/OwnMAX/releases/tag/v0.1.0). You need a client configured to connect to your server; installing an official client alone does not configure that connection.
 
 If you find OwnMAX useful, **give the repository a Star on GitHub**. It is a simple way to support the project and help others discover it.
 
+## Windows client
+
+Download the preview ZIP from [Releases](https://github.com/DanielRudenko1337/OwnMAX/releases/tag/v0.1.0), extract it, edit **`server.json`** beside **`START_OwnMAX.cmd`**, then run the launcher. The host is limited to 12 ASCII characters in this build; use a short DNS alias for longer addresses. See the [Windows setup guide](docs/WINDOWS.md) for TLS, ports, sign-in, and verification limits. Native Windows UI execution has not been verified for this preview.
+
 ## Features
 
-The server implements core messaging workflows. Coverage depends on the protocol, client version, and server configuration. MAX and TamTam do not have identical feature sets.
+The server implements core messaging workflows. Coverage depends on the client version and server configuration.
 
 | Area | Implementation | Status |
 | --- | --- | --- |
-| Authentication | Code requests and verification, sign-in, registration, user sessions | Test sign-in and registration codes appear in the server console; corresponding requests are tested for both protocols |
+| Authentication | Code requests and verification, sign-in, registration, user sessions | Test sign-in and registration codes appear in the server console; corresponding requests are tested for MAX |
 | Account | Profile, description, avatar, session details; MAX password and QR authentication handlers | Implemented; verification coverage varies by feature |
 | Contacts | Contact search and addition, user details, presence updates | Implemented |
 | Messages | Sending, history retrieval, deletion, reactions, read marks, and typing events | Implemented; activity refresh and expiry are tested in isolation |
 | Chats and groups | Group creation, participants, permissions, chat management, and MAX invitation links | Implemented; not every operation has been tested with real clients |
-| Folders | Folder retrieval and modification; extended MAX operations | Implemented; TamTam creation, retrieval, user isolation, and invalid requests are tested |
+| Folders | Folder retrieval and modification; extended MAX operations | Implemented; MAX creation, retrieval, user isolation, and invalid requests are tested |
 | Media | Photo, file, audio, and video upload and retrieval; signed URLs and ownership checks | Implemented; avatar lifecycle and ownership checks are tested |
 | MAX bots | Bot creation and management, profiles and avatars, HTTP API for messages, updates, and uploads | Implemented; first bot start and avatar management are tested |
 | MAX calls | Signaling, participant state, personal and group workflows, WebRTC relay, and screen data forwarding | Experimental; local audio, screen, leave, and rejoin scenarios pass isolated checks |
@@ -80,7 +84,6 @@ Set the main configuration in `.env`. See [.env.example](.env.example) for the f
 | --- | --- |
 | `host` | TCP and WebSocket listener address |
 | `oneme_tcp_port`, `oneme_ws_port` | MAX protocol ports |
-| `tamtam_tcp_port`, `tamtam_ws_port` | TamTam protocol ports |
 | `db_type` | Database type; the example uses `sqlite` |
 | `db_file` | Optional SQLite database path; defaults to `ownmax.db` inside the state directory |
 | `OWNMAX_DATA_DIR` | Directory for database files, secrets, and other server state |
@@ -144,9 +147,9 @@ python tests/run.py
 
 The current suite contains **19 unit tests and 8 isolated scenarios**. They use temporary state, local connections, and synthetic accounts. They do not require a live database, production tokens, or real conversations.
 
-Checks cover packet encoding, token scope and validation, installation and database initialization without overwriting existing data, portable configuration, absence of comments in Python sources, task shutdown before database closure, sign-in and registration code requests, WebSocket dispatch, TamTam folders, the sample bot, chat activity, avatars, bot startup, and selected call scenarios.
+Checks cover packet encoding, token scope and validation, installation and database initialization without overwriting existing data, portable configuration, absence of comments in Python sources, task shutdown before database closure, sign-in and registration code requests, WebSocket dispatch, MAX folders, the sample bot, chat activity, avatars, bot startup, and selected call scenarios.
 
-Additional checks covered Python package building, dependencies, startup of five local listeners with a temporary TLS certificate, and clean process termination. Isolated checks do not replace testing your deployment with real clients.
+Additional checks covered Python package building, dependencies, startup of three local listeners with a temporary TLS certificate, and clean process termination. Isolated checks do not replace testing your deployment with real clients.
 
 GitHub Actions checks are prepared in [.github/workflows/checks.yml](.github/workflows/checks.yml).
 
@@ -157,7 +160,6 @@ GitHub Actions checks are prepared in [.github/workflows/checks.yml](.github/wor
 | `src/ownmax/core` | Base handlers |
 | `src/ownmax/infrastructure` | Transport, configuration, storage access, and supporting services |
 | `src/ownmax/protocols/max` | MAX handlers, chats, bots, media, and experimental calls |
-| `src/ownmax/protocols/tamtam` | TamTam handlers |
 | `src/ownmax/integrations` | Telegram integration |
 | `src/ownmax/storage` | SQL schemas for empty databases |
 | `services/sms` | Separate SMS gateway; not used for console-based test sign-in codes |

@@ -11,9 +11,7 @@ services:
       OWNMAX_HTTP_HOST: 0.0.0.0
     ports:
       - "8443:8443"
-      - "8444:8444"
       - "8081:8081"
-      - "8082:8082"
       - "127.0.0.1:9183:9183"
     volumes:
       - ownmax_data:/app/data

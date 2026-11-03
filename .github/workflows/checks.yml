@@ -10,7 +10,7 @@ jobs:
           python-version: '3.12'
       - run: pip install -e . black build ruff
       - run: python tests/run.py
-      - run: black --check src tests services/sms/app examples
+      - run: black --check src tests services/sms/app examples tools
       - run: ruff check --select F821,F822,F823,F811 src services/sms/app examples tests
       - run: python -m build
       - run: docker build -t ownmax-check .
